@@ -1,0 +1,196 @@
+translation unit:
+   function declaration:
+      name: fib_rec
+      parameters:
+         function parameter:
+            mutable: false
+            name: x
+            plain type:
+               qualifiers:
+                  empty.
+               name: i32
+               scopes: unqualified.
+      return type:
+         plain type:
+            qualifiers:
+               empty.
+            name: i32
+            scopes: unqualified.
+      compound statement:
+         if statement:
+            condition:
+               binary expression:
+                  identifier expression:
+                     identifier:
+                        name: x
+                        scopes: unqualified.
+                  operator: <=
+                  literal expression:
+                     value: 1
+            true block:
+               compound statement:
+                  return statement:
+                     identifier expression:
+                        identifier:
+                           name: x
+                           scopes: unqualified.
+         return statement:
+            binary expression:
+               function call expression:
+                  function name:
+                     identifier expression:
+                        identifier:
+                           name: fib_rec
+                           scopes: unqualified.
+                  argument list:
+                     binary expression:
+                        identifier expression:
+                           identifier:
+                              name: x
+                              scopes: unqualified.
+                        operator: -
+                        literal expression:
+                           value: 1
+               operator: +
+               function call expression:
+                  function name:
+                     identifier expression:
+                        identifier:
+                           name: fib_rec
+                           scopes: unqualified.
+                  argument list:
+                     binary expression:
+                        identifier expression:
+                           identifier:
+                              name: x
+                              scopes: unqualified.
+                        operator: -
+                        literal expression:
+                           value: 2
+   function declaration:
+      name: compute_stuff
+      parameters:
+         function parameter:
+            mutable: false
+            name: n
+            plain type:
+               qualifiers:
+                  empty.
+               name: i32
+               scopes: unqualified.
+      return type:
+         plain type:
+            qualifiers:
+               empty.
+            name: i32
+            scopes: unqualified.
+      compound statement:
+         variable declaration statement:
+            variable declaration:
+               name: x
+               plain type:
+                  qualifiers:
+                     empty.
+                  name: i32
+                  scopes: unqualified.
+               mutable: true
+               initializer:
+                  literal expression:
+                     value: 0
+         while statement:
+            condition:
+               binary expression:
+                  postfix unary expression:
+                     operator: ++
+                     identifier expression:
+                        identifier:
+                           name: x
+                           scopes: unqualified.
+                  operator: <
+                  identifier expression:
+                     identifier:
+                        name: n
+                        scopes: unqualified.
+            block:
+               compound statement:
+         return statement:
+            binary expression:
+               identifier expression:
+                  identifier:
+                     name: x
+                     scopes: unqualified.
+               operator: -
+               literal expression:
+                  value: 1011
+   function declaration:
+      name: main
+      parameters:
+         function parameter:
+            mutable: false
+            name: argc
+            plain type:
+               qualifiers:
+                  empty.
+               name: i32
+               scopes: unqualified.
+         function parameter:
+            mutable: false
+            name: argv
+            plain type:
+               qualifiers:
+                  kind: *const *const 
+               name: char
+               scopes: unqualified.
+      return type:
+         plain type:
+            qualifiers:
+               empty.
+            name: i32
+            scopes: unqualified.
+      compound statement:
+         variable declaration statement:
+            variable declaration:
+               name: x
+               plain type:
+                  qualifiers:
+                     empty.
+                  name: i32
+                  scopes: unqualified.
+               mutable: false
+               initializer:
+                  function call expression:
+                     function name:
+                        identifier expression:
+                           identifier:
+                              name: compute_stuff
+                              scopes: unqualified.
+                     argument list:
+                        literal expression:
+                           value: 1024
+         if statement:
+            condition:
+               binary expression:
+                  function call expression:
+                     function name:
+                        identifier expression:
+                           identifier:
+                              name: fib_rec
+                              scopes: unqualified.
+                     argument list:
+                        identifier expression:
+                           identifier:
+                              name: x
+                              scopes: unqualified.
+                  operator: !=
+                  literal expression:
+                     value: 233
+            true block:
+               compound statement:
+                  return statement:
+                     literal expression:
+                        value: 0
+         return statement:
+            prefix unary expression:
+               operator: -
+               literal expression:
+                  value: 1
