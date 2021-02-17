@@ -123,6 +123,45 @@ translation unit:
                literal expression:
                   value: 1011
    function declaration:
+      name: identity
+      parameters:
+         function parameter:
+            mutable: false
+            name: x
+            function type:
+               parameters types: 
+                  plain type:
+                     qualifiers:
+                        empty.
+                     name: i32
+                     scopes: unqualified.
+               return type:
+                  plain type:
+                     qualifiers:
+                        empty.
+                     name: i32
+                     scopes: unqualified.
+      return type:
+         function type:
+            parameters types: 
+               plain type:
+                  qualifiers:
+                     empty.
+                  name: i32
+                  scopes: unqualified.
+            return type:
+               plain type:
+                  qualifiers:
+                     empty.
+                  name: i32
+                  scopes: unqualified.
+      compound statement:
+         return statement:
+            identifier expression:
+               identifier:
+                  name: x
+                  scopes: unqualified.
+   function declaration:
       name: main
       parameters:
          function parameter:
@@ -150,6 +189,64 @@ translation unit:
       compound statement:
          variable declaration statement:
             variable declaration:
+               name: test
+               array type:
+                  qualifiers:
+                     empty.
+                  element type:
+                     tuple type:
+                        qualifiers:
+                           empty.
+                        type list:
+                           plain type:
+                              qualifiers:
+                                 empty.
+                              name: i32
+                              scopes: unqualified.
+                           plain type:
+                              qualifiers:
+                                 empty.
+                              name: i32
+                              scopes: unqualified.
+                  size:
+                     literal expression:
+                        value: 5
+               mutable: false
+               initializer:
+                  array literal expression:
+                     values:
+                        tuple literal expression:
+                           value:
+                              literal expression:
+                                 value: 0
+                              literal expression:
+                                 value: 0
+                        tuple literal expression:
+                           value:
+                              literal expression:
+                                 value: 1
+                              literal expression:
+                                 value: 2
+                        tuple literal expression:
+                           value:
+                              literal expression:
+                                 value: 2
+                              literal expression:
+                                 value: 4
+                        tuple literal expression:
+                           value:
+                              literal expression:
+                                 value: 3
+                              literal expression:
+                                 value: 6
+                        tuple literal expression:
+                           value:
+                              literal expression:
+                                 value: 4
+                              literal expression:
+                                 value: 8
+         variable declaration statement:
+            variable declaration:
                name: x
                plain type:
                   qualifiers:
@@ -164,18 +261,23 @@ translation unit:
                            identifier:
                               name: compute_stuff
                               scopes: unqualified.
-                     argument list:
-                        literal expression:
-                           value: 1024
+                     argument list: empty.
          if statement:
             condition:
                binary expression:
                   function call expression:
                      function name:
-                        identifier expression:
-                           identifier:
-                              name: fib_rec
-                              scopes: unqualified.
+                        function call expression:
+                           function name:
+                              identifier expression:
+                                 identifier:
+                                    name: identity
+                                    scopes: unqualified.
+                           argument list:
+                              identifier expression:
+                                 identifier:
+                                    name: fib_rec
+                                    scopes: unqualified.
                      argument list:
                         identifier expression:
                            identifier:

@@ -388,6 +388,47 @@ namespace spc {
             return quals;
         }
 
+        Type* parse_func_type() noexcept {
+            if (!_lexer.match_token(Token::kw_fn)) {
+                return nullptr;
+            }
+
+            if (!_lexer.match_token(Token::pn_open_paren)) {
+                _emit_parse_error("expected '(' token after 'fn' token");
+                return nullptr;
+            }
+
+            FuncParamTypes param_types;
+            if (!_lexer.match_token(Token::pn_close_paren)) {
+                do {
+                    std::unique_ptr<Type> type(parse_type());
+                    if (!type) {
+                        _emit_parse_error("expected type in function parameter type list");
+                        return nullptr;
+                    }
+                    param_types.emplace_back(std::move(type));
+                } while (_lexer.match_token(Token::pn_comma));
+            }
+
+            if (!_lexer.match_token(Token::pn_close_paren)) {
+                _emit_parse_error("expected token ')' after function parameter type list");
+                return nullptr;
+            }
+
+            if (!_lexer.match_token(Token::pn_arrow)) {
+                _emit_parse_error("expected token '->' after function parameter type list");
+                return nullptr;
+            }
+
+            std::unique_ptr<Type> ret_type(parse_type());
+            if (!ret_type) {
+                _emit_parse_error("expected type after token '->'");
+                return nullptr;
+            }
+
+            return new FuncType(ret_type.release(), std::move(param_types));
+        }
+
         Type* parse_tuple_type() noexcept {
             const auto backup = _lexer.state();
             auto quals = parse_type_quals();
@@ -482,7 +523,7 @@ namespace spc {
         }
 
         Type* parse_type() noexcept {
-            if (auto type = parse_plain_type()) {
+            if (auto type = parse_func_type()) {
                 return type;
             }
 
@@ -491,6 +532,10 @@ namespace spc {
             }
 
             if (auto type = parse_array_type()) {
+                return type;
+            }
+
+            if (auto type = parse_plain_type()) {
                 return type;
             }
             return nullptr;
@@ -538,14 +583,17 @@ namespace spc {
                 return nullptr;
             }
 
-            TupleExprList arguments;
+            TupleExprList list;
             do {
+                if (!list.empty() && _lexer.match_token(Token::pn_close_paren)) {
+                    return new TupleLiteralExpr(std::move(list));
+                }
                 std::unique_ptr<Expr> expr(parse_expr());
                 if (!expr) {
                     _emit_parse_error("expected expression in tuple literal");
                     return nullptr;
                 } else {
-                    arguments.emplace_back(std::move(expr));
+                    list.emplace_back(std::move(expr));
                 }
             } while (_lexer.match_token(Token::pn_comma));
 
@@ -553,7 +601,7 @@ namespace spc {
                 _emit_parse_error("expected token ')' after expression list in tuple literal");
                 return nullptr;
             }
-            return new TupleLiteralExpr(std::move(arguments));
+            return new TupleLiteralExpr(std::move(list));
         }
 
         Expr* parse_array_literal_expr() noexcept {
@@ -561,21 +609,28 @@ namespace spc {
                 return nullptr;
             }
 
-            ArrayExprList literal;
+            ArrayExprList list;
+            if (_lexer.match_token(Token::pn_close_bracket)) {
+                return new ArrayLiteralExpr(std::move(list));
+            }
+
             do {
+                if (!list.empty() && _lexer.match_token(Token::pn_close_bracket)) {
+                    return new ArrayLiteralExpr(std::move(list));
+                }
                 std::unique_ptr<Expr> expr(parse_expr());
                 if (!expr) {
                     _emit_parse_error("expected expression in array literal");
                     return nullptr;
                 }
-                literal.emplace_back(std::move(expr));
+                list.emplace_back(std::move(expr));
             } while (_lexer.match_token(Token::pn_comma));
 
             if (!_lexer.match_token(Token::pn_close_bracket)) {
                 _emit_parse_error("expected token ']' after array literal expression");
                 return nullptr;
             }
-            return new ArrayLiteralExpr(std::move(literal));
+            return new ArrayLiteralExpr(std::move(list));
         }
 
         Expr* parse_primary_expr() noexcept {

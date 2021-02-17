@@ -131,6 +131,18 @@ namespace spc {
                 }
             } break;
 
+            case Node::Kind::func_type: {
+                const auto& type = static_cast<const FuncType&>(node);
+                os << Indent{ indent } << "function type:\n";
+                os << Indent{ indent + 1 } << "parameters types: "
+                   << (type.param_types.empty() ? "empty." : "\n");
+                for (const auto& each : type.param_types) {
+                    print(*each, os, indent + 2);
+                }
+                os << Indent{ indent + 1 } << "return type:\n";
+                print(*type.ret_type, os, indent + 2);
+            } break;
+
             case Node::Kind::func_param: {
                 const auto& param = static_cast<const FuncParam&>(node);
                 os << Indent{ indent } << "function parameter:\n";

@@ -19,6 +19,7 @@ namespace spc {
     using UniqueVec = std::vector<std::unique_ptr<T>>;
 
     using FuncParamList = UniqueVec<FuncParam>;
+    using FuncParamTypes = UniqueVec<Type>;
     using SubscriptArgList = UniqueVec<Expr>;
     using TupleTypesList = UniqueVec<Type>;
     using TupleExprList = UniqueVec<Expr>;
@@ -46,6 +47,7 @@ namespace spc {
             plain_type,
             tuple_type,
             array_type,
+            func_type,
             func_param,
             func_decl,
             var_decl,
@@ -126,11 +128,21 @@ namespace spc {
             : Type(Kind::array_type),
               size(size),
               type(type),
-              quals(quals) {}
+              quals(std::move(quals)) {}
 
         std::unique_ptr<Expr> size;
         std::unique_ptr<Type> type;
         TypeQualifiers quals;
+    };
+
+    struct FuncType : Type {
+        FuncType(Type* ret_type, FuncParamTypes&& param_types) noexcept
+            : Type(Kind::func_type),
+              ret_type(ret_type),
+              param_types(std::move(param_types)) {}
+
+        std::unique_ptr<Type> ret_type;
+        FuncParamTypes param_types;
     };
 
     struct FuncParam : Node {
